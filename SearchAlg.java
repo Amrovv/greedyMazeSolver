@@ -12,7 +12,7 @@ import java.util.Objects;
 * Explorer Class used to search for the target.
 * Utilises three controllers, Explorer Backtracking and Ideal Path.
 */
-public class GrandFinale{
+public class SearchAlg{
     // Enum Mode for different states of the robot.
     enum Mode {
         START,
