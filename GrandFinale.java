@@ -7,42 +7,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
 
-/**
- * For the Grand Finale, I implemented a modified version of Route B. I created a stack, called idealPath, which stores junction data
- * including junction coordinates and the heading the robot had when it left each junction. Whenever the robot arrives at a junction,
- * whether during exploration or backtracking, I use the nextHeading() method to compute the robot's absolute heading after turning
- * into the chosen passage direction, and push the corresponding Junction object onto the stack.
- *
- * When the robot backtracks and returns to a junction, the object at the top of idealPath is popped, since the last heading was
- * unsuccessful and did not move the robot closer to the target. Removing these entries ensures only useful headings are preserved.
- *
- * Storing coordinates of each junction allows the robot to handle loopy mazes more effectively. Simply storing headings without
- * coordinates does not allow us to detect if the robot revisits crossroads and identify cycles that can later be removed.
- * ALlowing us to find a shorther path for a loopy maze.
- *
- * After the first run, I pass a copy of idealPath into the optimizePath() method, which removes cycles and shortens the route.
- * Without this, the robot may enter a crossroads multiple times on the second run. The optimizePath() method removes these loops
- * by only keeping the successful exit from each crossroads, the one that eventually led the robot closer to the target, removing the
- * earlier unsuccesful exit.
- * This is achieved by using a HashMap that tracks visited junctions. As we look through the idealPath stack, each junction is pushed
- * onto the new stack. When a junction is encountered again, all entries between the first visit and the second are removed, eliminating
- * the cycle. This leaves only the successful heading for that junction, which did not result in a loop. This approach allows the robot
- * to freely explore loopy mazes on the first run, while producing an efficient, cycle-free path for the second run.
- * To support this, I created a Junction class that stores coordinates and the successful leaving heading. I overrode equals() and
- * hashCode() methods so Junction objects can be compared based on their coordinates, which allows them to be used as keys in the HashMap.
- *
- * I also added a heuristic improvement, instead of choosing randomly at junctions, the robot uses isTargetEast() and isTargetNorth() to
- * determine the target's position relative to the robot. This lets the robot move closer to the target while still backtracking
- * when necessary, improving path quality in loopy mazes.
- *
- * Together, these design choices allow the robot to solve both prim and loopy mazes efficiently.
- *
- * The robot also handles new mazes correctly. If a perfect path has already been calculated and the robot is in PERFECT_RUN mode,
- * getRuns() is used to detect when a new maze has been loaded. When this happens, idealPath is cleared and controlMode is reset to
- * START so that a new perfect path can be found. Since optimizePath() works on a copy of idealPath, the  original stack is preserved,
- * allowing the robot to repeat perfect runs on the same maze. A new perfect path is only generated when the maze itself changes,
- * or when the controller is reloaded.
- */
 
 /**
 * Explorer Class used to search for the target.
