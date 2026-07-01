@@ -5,7 +5,6 @@ A Java controller for an autonomous "robot mouse" that explores an unknown maze,
 Implements the decision-making logic only; it plugs into a third-party maze simulation environment that handles rendering, sensing, and run timing.
 
 ![Maze solver demo](docs/images/maze-demo.png)
-*Add a screenshot or GIF of the maze environment here.*
 
 ## How it works
 
